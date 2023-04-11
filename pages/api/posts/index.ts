@@ -13,17 +13,46 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const { currentUser } = await serverAuth(req, res);
             const { body } = req.body;
 
-            const post = prisma.post.create({
+            const post = await prisma.post.create({
                 data: {
                     body,
                     userId: currentUser.id
                 }
             });
+
             return res.status(200).json(post);
         }
 
         if (req.method === 'GET') {
-            // FINISH GET METHOD 
+            const { userId } = req.query;
+
+            let posts;
+
+            if (userId && typeof userId === 'string') {
+                posts = await prisma.post.findMany({
+                    where: {
+                        userId
+                    },
+                    include: {
+                        user: true,
+                        comment: true,
+                    },
+                    orderBy: {
+                        createdAt: 'desc'
+                    }
+                })
+            } else {
+                posts = await prisma.post.findMany({
+                    include: {
+                        user: true,
+                        comment: true
+                    },
+                    orderBy: {
+                        createdAt: 'desc'
+                    }
+                });
+            }
+            return res.status(200).json(posts);
         }
 
     } catch (e) {
