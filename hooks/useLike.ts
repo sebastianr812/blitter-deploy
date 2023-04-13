@@ -1,8 +1,10 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import useCurrentUser from "./useCurrentUser"
 import useLoginModal from "./useLoginModal";
 import usePost from "./usePost";
 import usePosts from "./usePosts";
+import { toast } from "react-hot-toast";
+import axios from "axios";
 
 const useLike = ({ postId, userId }: { postId: string, userId?: string }) => {
     const { data: currentUser } = useCurrentUser();
@@ -19,5 +21,42 @@ const useLike = ({ postId, userId }: { postId: string, userId?: string }) => {
         return list.includes(currentUser?.id)
     }, [currentUser?.id, fetchedPost?.likedIds]);
 
+    const toggleLike = useCallback(async () => {
 
+        if (!currentUser) {
+            return loginModal.onOpen();
+        }
+
+        try {
+            let request;
+
+            if (hasLiked) {
+                const url = `/api/like?postId=${postId}`
+                request = () => axios.get(url);
+            } else {
+                request = () => axios.post('/api/like', { postId })
+            }
+
+            await request();
+            mutateFetchedPost();
+            mutateFetchedPosts();
+
+            toast.success('Success')
+
+        } catch (error) {
+            toast.error('Something went wrong');
+        }
+
+
+
+    }, [currentUser, hasLiked, loginModal, mutateFetchedPost, mutateFetchedPosts, postId]);
+
+    return {
+        hasLiked,
+        toggleLike
+    };
 }
+
+
+
+export default useLike;
