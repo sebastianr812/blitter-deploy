@@ -46,7 +46,7 @@ const LoginModal = () => {
 
     const footerContent = (
         <div className="mt-4 text-center text-neutral-400">
-            <p>First time using Twitter? <span className="text-white cursor-pointer hover:underline" onClick={onToggle}> Create an account</span></p>
+            <p>First time using Blitter? <span className="text-white cursor-pointer hover:underline" onClick={onToggle}> Create an account</span></p>
         </div>
     )
 

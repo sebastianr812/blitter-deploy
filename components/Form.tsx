@@ -57,6 +57,8 @@ const Form: React.FC<FormProps> = ({
     }, [body, mutatePosts, isComment, postId, mutatePost]);
 
 
+
+
     return (
         <div className="border-b-[1px] border-neutral-800 px-5 py-2">
             {
@@ -77,7 +79,7 @@ const Form: React.FC<FormProps> = ({
                     </div>
                 ) : (
                     <div className="py-8">
-                        <h1 className="pb-4 text-2xl font-bold text-center text-white">Welcome to Twitter</h1>
+                        <h1 className="pb-4 text-2xl font-bold text-center text-white">Welcome to Blitter</h1>
                         <div className="flex flex-row items-center justify-center gap-4">
                             <Button label="Login" onClick={loginModal.onOpen} />
                             <Button label="Register" onClick={registerModal.onOpen} secondary />
